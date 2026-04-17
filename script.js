@@ -1,79 +1,86 @@
-const db = {
-    // CARBOIDRATI + FIBRE
-    "pasta": ["carboidrati"], "pane": ["carboidrati"], "riso": ["carboidrati"],
-    "gallette di riso": ["carboidrati"], "gallette di mais": ["carboidrati"], 
-    "gallette di segale": ["carboidrati", "fibre"], "gallette di farro": ["carboidrati"],
-    "patate": ["carboidrati"],
-    
-    // LEGUMI (Tripla natura)
-    "fagioli": ["proteine", "carboidrati", "fibre"],
-    "lenticchie": ["proteine", "carboidrati", "fibre"],
-    "ceci": ["proteine", "carboidrati", "fibre"],
-    "piselli": ["proteine", "carboidrati", "fibre"],
-    
-    // PROTEINE + GRASSI (Classificazione Formaggi)
-    "mozzarella": ["proteine", "grassi saturi"],
-    "fiocchi di latte": ["proteine", "basso contenuto grassi"],
-    "ricotta": ["proteine", "grassi moderati"],
-    "parmigiano": ["proteine", "grassi saturi", "colesterolo"],
-    
-    // VERDURE (Fibre pure)
-    "zucchine": ["fibre"], "insalata": ["fibre"], "broccoli": ["fibre"], "spinaci": ["fibre"]
-};
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
 
-function analizzaPasto() {
-    const input = document.getElementById('food-input').value.toLowerCase().trim();
-    if (!input) return;
-
-    const categorie = db[input] || [];
-    let feedback = `<div class="card"><h3>${input.toUpperCase()}</h3>`;
-    
-    if (categorie.length > 0) {
-        feedback += `<p>Contiene: ${categorie.join(', ')}.</p>`;
-    }
-
-    let suggerimenti = "<h4>Analisi del Piatto:</h4>";
-
-    // Alert Fibre
-    if (!categorie.includes("fibre")) {
-        suggerimenti += `<p style="color:var(--warning-soft)">⚠️ <strong>Carenza di Fibre:</strong> Questo pasto è povero di fibre. Aggiungi verdura o legumi per aiutare l'intestino e l'indice glicemico.</p>`;
-    }
-
-    // Alert Carboidrati
-    if (!categorie.includes("carboidrati")) {
-        suggerimenti += `<p>⛽ <strong>Reminder:</strong> Aggiungi energia con pane, patate o <strong>gallette (riso, mais, segale)</strong>.</p>`;
-    }
-
-    // Suggerimento Proteine e focus Formaggi
-    if (!categorie.includes("proteine")) {
-        suggerimenti += `<strong>💪 Scegli una proteina:</strong><ul>
-            <li><strong>Fiocchi di Latte:</strong> Scelta migliore della mozzarella. Contengono meno calorie e pochissimi grassi saturi, pur essendo ricchi di proteine (caseine).</li>
-            <li><strong>Pesce o Pollo:</strong> Proteine magre.</li>
-            <li><strong>Legumi:</strong> Ottimi perché ti danno anche fibre e carboidrati complessi.</li>
-        </ul>`;
-    }
-
-    document.getElementById('feedback-card').innerHTML = feedback;
-    document.getElementById('suggestions-card').innerHTML = suggerimenti;
-    document.getElementById('result-area').classList.remove('hidden');
+:root {
+    --bg: #f4f7f6;
+    --text: #2c3e50;
+    --green: #7fb394;
+    --blue: #70a1ff;
+    --orange: #f39c12;
+    --red: #e74c3c;
+    --white: #ffffff;
 }
 
-// Popolamento automatico della Guida Medica
-function caricaGuida() {
-    const guida = document.getElementById('guida-contenuto');
-    guida.innerHTML = `
-        <div class="card">
-            <h3>I Grassi: Buoni vs Cattivi</h3>
-            <p><strong>Saturi (Burro, Formaggi grassi, Carne rossa):</strong> Se eccessivi, aumentano il colesterolo LDL e il rischio cardiovascolare.</p>
-            <p><strong>Insaturi (Olio d'oliva, Pesce, Noci):</strong> Proteggono il cuore. Preferisci sempre questi.</p>
-        </div>
-        <div class="card">
-            <h3>Eccesso di Carboidrati</h3>
-            <p>Troppi carboidrati (specialmente zuccheri semplici) causano picchi di insulina che possono portare a insulino-resistenza e aumento di peso viscerale.</p>
-        </div>
-        <div class="card">
-            <h3>Il potere dei Legumi</h3>
-            <p>Sono alimenti "completi": contengono <strong>proteine vegetali</strong>, <strong>carboidrati a lento rilascio</strong> e moltissime <strong>fibre</strong>, fondamentali per la salute del microbiota.</p>
-        </div>
-    `;
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    margin: 0;
+    font-size: 18px;
 }
+
+.tab-bar {
+    display: flex;
+    background: var(--white);
+    position: sticky;
+    top: 0;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    z-index: 100;
+}
+
+.tab-bar button {
+    flex: 1;
+    padding: 20px;
+    border: none;
+    background: none;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #95a5a6;
+    cursor: pointer;
+}
+
+.tab-bar button.active {
+    color: var(--green);
+    border-bottom: 4px solid var(--green);
+}
+
+main { max-width: 600px; margin: 20px auto; padding: 15px; }
+
+.card {
+    background: var(--white);
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 15px;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    box-sizing: border-box;
+}
+
+button#btn-analizza {
+    width: 100%;
+    background-color: var(--green);
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 10px;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.alert-box {
+    background: #fff3cd;
+    border-left: 5px solid var(--orange);
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 5px;
+}
+
+.fibre-tag { color: #27ae60; font-weight: bold; }
+.hidden { display: none; }
+.btn-save { background: var(--blue); color: white; width: 100%; padding: 15px; border-radius: 10px; border: none; font-weight: bold; }
