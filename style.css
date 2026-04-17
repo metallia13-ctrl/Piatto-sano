@@ -1,0 +1,77 @@
+:root {
+    --primary: #2c3e50;
+    --accent: #27ae60;
+    --warning: #e67e22;
+    --danger: #c0392b;
+    --bg: #f9f9f9;
+}
+
+body {
+    font-family: 'Open Sans', Arial, sans-serif;
+    font-size: 18pt; /* Font grande per anziani */
+    margin: 0;
+    background-color: var(--bg);
+    color: var(--primary);
+}
+
+.tab-bar {
+    display: flex;
+    position: sticky;
+    top: 0;
+    background: white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.tab-bar button {
+    flex: 1;
+    padding: 20px;
+    border: none;
+    background: none;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.tab-bar button.active {
+    border-bottom: 5px solid var(--accent);
+    color: var(--accent);
+}
+
+.card {
+    background: white;
+    margin: 20px;
+    padding: 20px;
+    border-radius: 15px;
+    border-left: 10px solid var(--accent);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.alert-colesterolo {
+    background: #fff3cd;
+    border: 2px solid var(--warning);
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 8px;
+    font-size: 0.9em;
+}
+
+input[type="text"] {
+    width: 80%;
+    padding: 15px;
+    font-size: 1.2rem;
+    border-radius: 10px;
+    border: 2px solid #ccc;
+    display: block;
+    margin: 10px auto;
+}
+
+button {
+    padding: 15px 30px;
+    font-size: 1.1rem;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-save { background-color: var(--accent); color: white; width: 90%; margin: 20px auto; display: block; }
+.hidden { display: none; }
