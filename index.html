@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Piatto Chiaro - Assistente Alimentare</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="tab-bar">
+        <button onclick="showTab('componi')" id="tab-componi" class="active">Componi Pasto</button>
+        <button onclick="showTab('diario')" id="tab-diario">Mio Diario</button>
+    </nav>
+
+    <main id="app-container">
+        <section id="componi" class="tab-content">
+            <h1>Cosa vuoi mangiare?</h1>
+            <p class="instruzioni">Scrivi un alimento (es. Pasta, Pollo, Mela)</p>
+            <div class="input-group">
+                <input type="text" id="food-input" placeholder="Scrivi qui...">
+                <button onclick="analizzaPasto()" id="btn-analizza">Controlla</button>
+            </div>
+
+            <div id="result-area" class="hidden">
+                <div id="feedback-card" class="card"></div>
+                <div id="suggestions-card" class="card"></div>
+                <button onclick="salvaNelDiario()" class="btn-save">Salva nel Diario</button>
+            </div>
+        </section>
+
+        <section id="diario" class="tab-content hidden">
+            <h1>Storico Pasti</h1>
+            <div id="diario-lista"></div>
+            <button onclick="svuotaDiario()" class="btn-delete">Svuota Diario</button>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
