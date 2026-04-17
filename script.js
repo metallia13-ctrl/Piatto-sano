@@ -1,83 +1,79 @@
 const db = {
-    "pasta": ["carboidrati"], "pane": ["carboidrati"], "riso": ["carboidrati"], "patate": ["carboidrati"],
-    "pollo": ["proteine"], "tacchino": ["proteine"], "manzo": ["proteine"], "uova": ["proteine"],
-    "pesce": ["proteine"], "merluzzo": ["proteine"], "salmone": ["proteine"],
-    "formaggio": ["proteine", "grassi"], "mozzarella": ["proteine", "grassi"], "parmigiano": ["proteine", "grassi"],
-    "olio": ["grassi"], "burro": ["grassi"],
-    "mela": ["fibre"], "insalata": ["fibre"], "zucchine": ["fibre"], "carote": ["fibre"]
+    // CARBOIDRATI + FIBRE
+    "pasta": ["carboidrati"], "pane": ["carboidrati"], "riso": ["carboidrati"],
+    "gallette di riso": ["carboidrati"], "gallette di mais": ["carboidrati"], 
+    "gallette di segale": ["carboidrati", "fibre"], "gallette di farro": ["carboidrati"],
+    "patate": ["carboidrati"],
+    
+    // LEGUMI (Tripla natura)
+    "fagioli": ["proteine", "carboidrati", "fibre"],
+    "lenticchie": ["proteine", "carboidrati", "fibre"],
+    "ceci": ["proteine", "carboidrati", "fibre"],
+    "piselli": ["proteine", "carboidrati", "fibre"],
+    
+    // PROTEINE + GRASSI (Classificazione Formaggi)
+    "mozzarella": ["proteine", "grassi saturi"],
+    "fiocchi di latte": ["proteine", "basso contenuto grassi"],
+    "ricotta": ["proteine", "grassi moderati"],
+    "parmigiano": ["proteine", "grassi saturi", "colesterolo"],
+    
+    // VERDURE (Fibre pure)
+    "zucchine": ["fibre"], "insalata": ["fibre"], "broccoli": ["fibre"], "spinaci": ["fibre"]
 };
-
-const fonti = {
-    proteine: [
-        {nome: "Pollo", info: "Proteina magra"},
-        {nome: "Pesce", info: "Ottimo per il cuore"},
-        {nome: "Formaggi", alert: "Attenzione: contengono grassi saturi. Monitora il colesterolo."}
-    ],
-    carboidrati: ["Pane", "Pasta", "Riso", "Cereali"],
-    fibre: ["Insalata", "Zucchine", "Spinaci", "Frutta di stagione"]
-};
-
-let pastoCorrente = "";
 
 function analizzaPasto() {
     const input = document.getElementById('food-input').value.toLowerCase().trim();
     if (!input) return;
 
     const categorie = db[input] || [];
-    let feedback = `Hai scelto: <strong>${input}</strong>.<br>`;
-    let suggerimenti = "<h3>Cosa aggiungere per un pasto completo?</h3>";
-
-    if (categorie.length === 0) {
-        feedback += "Alimento non riconosciuto, ma ricordati di variare!";
-    } else {
-        feedback += `Questo alimento contiene: ${categorie.join(' e ')}.`;
+    let feedback = `<div class="card"><h3>${input.toUpperCase()}</h3>`;
+    
+    if (categorie.length > 0) {
+        feedback += `<p>Contiene: ${categorie.join(', ')}.</p>`;
     }
 
-    // Reminder Carboidrati e Logica Suggerimenti
+    let suggerimenti = "<h4>Analisi del Piatto:</h4>";
+
+    // Alert Fibre
+    if (!categorie.includes("fibre")) {
+        suggerimenti += `<p style="color:var(--warning-soft)">⚠️ <strong>Carenza di Fibre:</strong> Questo pasto è povero di fibre. Aggiungi verdura o legumi per aiutare l'intestino e l'indice glicemico.</p>`;
+    }
+
+    // Alert Carboidrati
     if (!categorie.includes("carboidrati")) {
-        suggerimenti += "<p>⚠️ <strong>Ricorda i Carboidrati!</strong> Ti servono per l'energia. Aggiungi: " + fonti.carboidrati.join(', ') + ".</p>";
+        suggerimenti += `<p>⛽ <strong>Reminder:</strong> Aggiungi energia con pane, patate o <strong>gallette (riso, mais, segale)</strong>.</p>`;
     }
 
+    // Suggerimento Proteine e focus Formaggi
     if (!categorie.includes("proteine")) {
-        suggerimenti += "<p>Aggiungi una <strong>Fonte Proteica</strong>:</p><ul>";
-        fonti.proteine.forEach(p => {
-            suggerimenti += `<li><strong>${p.nome}</strong>: ${p.info || ''}`;
-            if (p.alert) suggerimenti += `<div class="alert-colesterolo">⚠️ ${p.alert}</div>`;
-            suggerimenti += `</li>`;
-        });
-        suggerimenti += "</ul>";
+        suggerimenti += `<strong>💪 Scegli una proteina:</strong><ul>
+            <li><strong>Fiocchi di Latte:</strong> Scelta migliore della mozzarella. Contengono meno calorie e pochissimi grassi saturi, pur essendo ricchi di proteine (caseine).</li>
+            <li><strong>Pesce o Pollo:</strong> Proteine magre.</li>
+            <li><strong>Legumi:</strong> Ottimi perché ti danno anche fibre e carboidrati complessi.</li>
+        </ul>`;
     }
 
-    pastoCorrente = input;
     document.getElementById('feedback-card').innerHTML = feedback;
     document.getElementById('suggestions-card').innerHTML = suggerimenti;
     document.getElementById('result-area').classList.remove('hidden');
 }
 
-function salvaNelDiario() {
-    const diario = JSON.parse(localStorage.getItem('diarioPasti')) || [];
-    const ora = new Date().toLocaleString();
-    diario.push({ pasto: pastoCorrente, data: ora });
-    localStorage.setItem('diarioPasti', JSON.stringify(diario));
-    alert("Pasto salvato con successo!");
-    mostraDiario();
-}
-
-function mostraDiario() {
-    const diario = JSON.parse(localStorage.getItem('diarioPasti')) || [];
-    const lista = document.getElementById('diario-lista');
-    lista.innerHTML = diario.map(item => `
-        <div class="card" style="border-left-color: #3498db">
-            <small>${item.data}</small><br>
-            <strong>${item.pasto}</strong>
+// Popolamento automatico della Guida Medica
+function caricaGuida() {
+    const guida = document.getElementById('guida-contenuto');
+    guida.innerHTML = `
+        <div class="card">
+            <h3>I Grassi: Buoni vs Cattivi</h3>
+            <p><strong>Saturi (Burro, Formaggi grassi, Carne rossa):</strong> Se eccessivi, aumentano il colesterolo LDL e il rischio cardiovascolare.</p>
+            <p><strong>Insaturi (Olio d'oliva, Pesce, Noci):</strong> Proteggono il cuore. Preferisci sempre questi.</p>
         </div>
-    `).reverse().join('');
-}
-
-function showTab(tab) {
-    document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
-    document.getElementById(tab).classList.remove('hidden');
-    document.querySelectorAll('.tab-bar button').forEach(b => b.classList.remove('active'));
-    document.getElementById('tab-' + tab).classList.add('active');
-    if(tab === 'diario') mostraDiario();
+        <div class="card">
+            <h3>Eccesso di Carboidrati</h3>
+            <p>Troppi carboidrati (specialmente zuccheri semplici) causano picchi di insulina che possono portare a insulino-resistenza e aumento di peso viscerale.</p>
+        </div>
+        <div class="card">
+            <h3>Il potere dei Legumi</h3>
+            <p>Sono alimenti "completi": contengono <strong>proteine vegetali</strong>, <strong>carboidrati a lento rilascio</strong> e moltissime <strong>fibre</strong>, fondamentali per la salute del microbiota.</p>
+        </div>
+    `;
 }
