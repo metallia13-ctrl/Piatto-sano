@@ -1,134 +1,197 @@
-<div class="card">
-    <h3>1. Carboidrati, proteine e grassi</h3>
-    
-    <p>
-    Come si compone un Piatto Sano Immaginiamo il nostro piatto diviso in parti per assicurarci di avere tutti i nutrienti necessari:
-Tanta verdura e frutta: Una grande metà del piatto deve essere colorata con ortaggi e frutta fresca, consumandone almeno 5 porzioni al giorno
-.
-Una parte di carboidrati: Da preferire i cereali integrali
-.
-Una parte di proteine: Ruotando le diverse fonti durante la settimana.
-Il tutto deve essere accompagnato da una corretta idratazione (bere molta acqua) e dall'uso di olio d'oliva come condimento principale
-.
-I Carboidrati: la nostra energia I carboidrati sono la benzina del nostro corpo.
-Dove si trovano: Le fonti principali sono la pasta, il riso, il pane, le patate, l'orzo e il farro
-.
-Il consiglio: È molto importante scegliere spesso le versioni integrali di pane e pasta
-. Bisogna invece limitare il più possibile gli zuccheri semplici, come i dolci e le bevande zuccherate, che non fanno bene al nostro organismo
-.
-Le Proteine e il rischio di Sarcopenia Le proteine sono i "mattoni" che mantengono forti i nostri muscoli e le nostre ossa.
-Dove si trovano: Le troviamo in alimenti come carne (è meglio preferire quella bianca, come pollo e tacchino), pesce, uova, formaggi e nei legumi (come fagioli, piselli e ceci)
-. È consigliato limitare il consumo di carne rossa
-.
-Cos'è la Sarcopenia: Invecchiando, il nostro corpo tende a perdere massa muscolare e forza fisica, una condizione chiamata sarcopenia
-. Seguire una corretta alimentazione ricca delle giuste proteine ci aiuta a proteggere i muscoli, migliorando la forza fisica e garantendo una maggiore qualità della vita
-.
-I Grassi: buoni e cattivi I grassi sono necessari, ma bisogna saper scegliere quali mangiare, perché non sono tutti uguali:
-Grassi Monoinsaturi (I più sani): Fanno benissimo al corpo e il loro rappresentante d'eccellenza è l'olio extravergine di oliva, che deve essere la principale fonte di grassi da usare per condire
-.
-Grassi Polinsaturi (Ottimi per il cervello): Si trovano soprattutto nel pesce e nella frutta a guscio (come le noci)
-. Questi grassi sono preziosi perché aiutano a mantenere la mente lucida e riducono il rischio di malattie come l'Alzheimer, il Parkinson e la depressione
-.
-Grassi Saturi e Trans (Da limitare): Si trovano nelle carni grasse, nel burro, negli insaccati e nei dolci
-. Bisogna mangiarne pochissimi (meno del 10% delle calorie giornaliere), perché consumarne in eccesso affatica il cuore e aumenta i rischi per la salute
-..
-    </p>
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        :root {
+            --primary-blue: #2c3e50;
+            --accent-blue: #3498db;
+            --bg-light: #f8f9fa;
+            --text-dark: #333;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background-color: var(--bg-light);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 25px;
+            padding: 25px;
+            border-left: 5px solid var(--accent-blue);
+        }
+
+        h2, h3 {
+            color: var(--primary-blue);
+            margin-top: 0;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        .highlight {
+            color: var(--accent-blue);
+            font-weight: bold;
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.95em;
+        }
+
+        th {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            text-align: left;
+            padding: 12px;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .footer-note {
+            font-style: italic;
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 15px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <div class="card">
+        <h3>1. I Pilastri dell'Alimentazione</h3>
+        <p>Un piatto equilibrato è la base della salute:</p>
+        <ul>
+            <li><strong>Verdura e Frutta:</strong> Devono comporre metà del piatto (almeno 5 porzioni al giorno).</li>
+            <li><strong>Carboidrati:</strong> Scegliere versioni integrali (pasta, riso, pane) e limitare gli zuccheri semplici.</li>
+            <li><strong>Proteine:</strong> Essenziali contro la <em>sarcopenia</em> (perdita di massa muscolare); preferire carni bianche, pesce e legumi.</li>
+            <li><strong>Grassi Sani:</strong> Olio extravergine di oliva e noci aiutano a mantenere la mente lucida e proteggono da Alzheimer e Parkinson.</li>
+        </ul>
+    </div>
+
+    <div class="card" style="border-left-color: #27ae60;">
+        <h3>2. Frequenza e Porzioni</h3>
+        <p>Linee guida per una dieta bilanciata:</p>
+        <div class="info-grid">
+            <div>
+                <strong>Tutti i giorni:</strong>
+                <ul>
+                    <li>Almeno 5 porzioni di frutta e verdura.</li>
+                    <li>Cereali prevalentemente integrali.</li>
+                </ul>
+            </div>
+            <div>
+                <strong>Con moderazione:</strong>
+                <ul>
+                    <li>Pesce, uova e carni bianche.</li>
+                    <li>Limitare carni rosse, salumi e cibi ultra-processati.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="card" style="border-left-color: #9b59b6;">
+        <h3>3. Scudo per la Mente</h3>
+        <p>La Dieta Mediterranea riduce il rischio di declino cognitivo grazie a:</p>
+        <ul>
+            <li><strong>Alimenti Blu/Viola:</strong> Frutti di bosco e melanzane contengono flavonoidi contro l'invecchiamento.</li>
+            <li><strong>Fragole:</strong> Ricche di vitamina C e polifenoli per il sistema nervoso.</li>
+            <li><strong>Funghi:</strong> Supportano il metabolismo del tessuto nervoso.</li>
+        </ul>
+    </div>
+
+    <div class="card" style="border-left-color: #e74c3c;">
+        <h2>Rischi e Complicazioni del Diabete</h2>
+        <p>Il diabete non gestito può danneggiare vasi sanguigni e nervi.</p>
+
+        <h3>Salute del Cervello</h3>
+        <ul>
+            <li><strong>Demenza e Alzheimer:</strong> Il rischio di declino cognitivo può raddoppiare.</li>
+            <li><strong>Ictus:</strong> Probabilità raddoppiata a causa dell'indurimento delle arterie.</li>
+            <li><strong>Demenza Vascolare:</strong> Causata da piccoli danni ai capillari cerebrali.</li>
+        </ul>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Complicazione</th>
+                    <th>Frequenza</th>
+                    <th>Effetto Principale</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Neuropatia</strong></td>
+                    <td>Una persona su 2</td>
+                    <td>Dolore e perdita di sensibilità.</td>
+                </tr>
+                <tr>
+                    <td><strong>Retinopatia</strong></td>
+                    <td>Una persona su 3</td>
+                    <td>Danni alla vista.</td>
+                </tr>
+                <tr>
+                    <td><strong>Nefropatia</strong></td>
+                    <td>Una persona su 3</td>
+                    <td>Insufficienza renale.</td>
+                </tr>
+                <tr>
+                    <td><strong>Piede Diabetico</strong></td>
+                    <td>Una persona su 4</td>
+                    <td>Ulcere e rischio amputazione.</td>
+                </tr>
+                <tr>
+                    <td><strong>Declino Cognitivo</strong></td>
+                    <td>Una persona su 4</td>
+                    <td>Perdita di memoria.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <span class="footer-note">
+            Nota: Un controllo costante della glicemia può ridurre significativamente queste probabilità.
+        </span>
+    </div>
 
 </div>
-<div class="card">
-    <h3>2. Quante porzioni?</h3>
-    
-    <p>
-   Cosa mangiare spesso (tutti i giorni)
-Verdura e Frutta: Bisogna mangiarne in abbondanza, almeno 5 porzioni al giorno (ad esempio, due porzioni di verdura e tre di frutta fresca)
-.
-Cereali: Almeno la metà dei cereali che mangiamo (pane, pasta) dovrebbe essere integrale e il meno lavorata possibile
-.
-Cosa mangiare con moderazione (durante la settimana)
-È bene consumare in quantità moderata le giuste fonti di proteine: via libera a pesce, frutti di mare, uova, carni bianche (come pollo o tacchino), latte e formaggi
-.
-Cosa limitare: i rischi di Salumi e Alimenti Trasformati La Dieta Mediterranea ci consiglia di limitare molto la carne rossa e i dolci
-. In particolare, bisogna fare molta attenzione a:
-Salumi e Insaccati: Questi alimenti (come salame, mortadella, ecc.) sono molto ricchi di grassi
-. Consumarli spesso significa introdurre nel corpo troppi "grassi saturi", che affaticano l'organismo e aumentano i rischi per la salute del nostro cuore
-.
-Alimenti Trasformati (o molto lavorati): Le linee guida ci raccomandano di preferire sempre cibi freschi, interi e poco lavorati
-. I cibi industriali o troppo trasformati nascondono spesso grassi cattivi (chiamati grassi "trans") che vanno evitati il più possibile
-, oltre a zuccheri in eccesso che fanno male alla salute
-. Anche le bevande zuccherate andrebbero evitate o ridotte al minimo
-    </p>
 
-</div>
-<div class="card">
-    <h3>3. La dieta e la demenza</h3>
-    
-    <p>
-  La Dieta Mediterranea come scudo per la mente
-Seguire la Dieta Mediterranea aiuta concretamente a mantenere una buona "salute neurocognitiva"
-.
-Questo stile alimentare riduce l'incidenza di malattie legate al declino cognitivo come l'Alzheimer, il Parkinson e persino la depressione
-.
-Il beneficio protettivo è dato dall'ottimo apporto di acidi grassi polinsaturi, vitamine e minerali che questa dieta garantisce
-.
-I cibi alleati del sistema nervoso
-Frutta e verdura Blu/Viola (Ottimi per la mente): Alimenti come frutti di bosco, prugne, melanzane, radicchio, uva nera, fichi neri e cavolo cappuccio rosso sono ricchissimi di sostanze anti-invecchiamento (come flavonoidi e resveratrolo). Queste sostanze favoriscono e mantengono l'acutezza mentale
-.
-Fragole: Grazie al loro prezioso contenuto di vitamina C e di potenti antiossidanti (i polifenoli), sembrano essere particolarmente utili per prevenire proprio l'invecchiamento del sistema nervoso
-.
-Funghi: Le vitamine e i minerali presenti al loro interno aiutano a regolare in modo corretto il metabolismo del tessuto nervoso
-.
-In sintesi, portare a tavola tutti i giorni i colori giusti, uniti ai grassi sani della Dieta Mediterranea, è una strategia eccellente e provata per aiutare a mantenere la mente attiva e ritardare l'invecchiamento del cervello.
-    </p>
-<section id="diabete-rischi">
-    <h2>Rischi e Complicazioni del Diabete</h2>
-    
-    <p>Il diabete, se non gestito correttamente, può danneggiare i vasi sanguigni e i nervi, influenzando non solo il corpo ma anche le funzioni cerebrali.</p>
-
-    <h3>Salute del Cervello e Cognizione</h3>
-    <ul>
-        <li><strong>Demenza e Alzheimer:</strong> Il diabete può raddoppiare il rischio di declino cognitivo. L'insulino-resistenza ostacola la pulizia delle tossine cerebrali.</li>
-        <li><strong>Ictus:</strong> L'indurimento delle arterie aumenta di due volte la probabilità di eventi cerebrovascolari.</li>
-        <li><strong>Demenza Vascolare:</strong> Piccoli danni ai capillari cerebrali riducono gradualmente memoria e capacità di ragionamento.</li>
-    </ul>
-
-    <h3>Statistiche e Complicazioni Comuni</h3>
-    <table border="1" style="width:100%; border-collapse: collapse; text-align: left;">
-        <thead style="background-color: #f2f2f2;">
-            <tr>
-                <th style="padding: 10px;">Complicazione</th>
-                <th style="padding: 10px;">Frequenza</th>
-                <th style="padding: 10px;">Effetto Principale</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td style="padding: 10px;"><strong>Neuropatia</strong></td>
-                <td style="padding: 10px;">Una persona su 2</td>
-                <td style="padding: 10px;">Dolore, formicolio e perdita di sensibilità.</td>
-            </tr>
-            <tr>
-                <td style="padding: 10px;"><strong>Retinopatia</strong></td>
-                <td style="padding: 10px;">Una persona su 3</td>
-                <td style="padding: 10px;">Danni alla vista e rischio cecità.</td>
-            </tr>
-            <tr>
-                <td style="padding: 10px;"><strong>Nefropatia</strong></td>
-                <td style="padding: 10px;">Una persona su 3</td>
-                <td style="padding: 10px;">Danni ai reni e insufficienza renale.</td>
-            </tr>
-            <tr>
-                <td style="padding: 10px;"><strong>Piede Diabetico</strong></td>
-                <td style="padding: 10px;">Una persona su 4</td>
-                <td style="padding: 10px;">Ulcere gravi e rischio amputazione.</td>
-            </tr>
-            <tr>
-                <td style="padding: 10px;"><strong>Declino Cognitivo</strong></td>
-                <td style="padding: 10px;">Una persona su 4</td>
-                <td style="padding: 10px;">Perdita di memoria e rallentamento mentale.</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <p style="margin-top: 15px;"><em>Nota: Un controllo costante della glicemia e uno stile di vita sano possono ridurre significativamente queste probabilità.</em></p>
-</section>
-</div>
+</body>
+</html>
