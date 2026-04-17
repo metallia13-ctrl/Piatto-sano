@@ -4,9 +4,8 @@ const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?for
 const GIULIA_SHEET_ID = '1hSMX4IAtoX2M7BbIPvgVODCCqMY7HUWdt_MGKLpBbvE';
 const GIULIA_SHEET_URL = `https://docs.google.com/spreadsheets/d/${GIULIA_SHEET_ID}/export?format=csv`;
 
+// L'ID del tuo documento per la Guida
 const DOC_GUIDA_ID = '1C4-HVbOTA-ZTEKXRsLDVSgqK0mPfz3Kt8zejc1w2LfM';
-// Nota: Abbiamo rimosso l'export fisso per gestirlo nella funzione con il timestamp
-const DOC_BASE_URL = `https://docs.google.com/document/d/${DOC_GUIDA_ID}/export?format=html`;
 
 let nutrizioneDB = [];
 let consigliGiuliaDB = [];
@@ -14,8 +13,9 @@ let alimentoRilevato = null;
 
 async function caricaDatabase() {
     try {
-        // Aggiungiamo un timestamp anche ai database per sicurezza
         const ts = new Date().getTime();
+        
+        // Database Alimenti
         const response1 = await fetch(`${SHEET_URL}&t=${ts}`);
         const data1 = await response1.text();
         const righe1 = data1.split('\n').slice(1);
@@ -34,6 +34,7 @@ async function caricaDatabase() {
             };
         }).filter(item => item !== null);
 
+        // Database Consigli Giulia
         const response2 = await fetch(`${GIULIA_SHEET_URL}&t=${ts}`);
         const data2 = await response2.text();
         const righe2 = data2.split('\n').slice(1);
@@ -90,7 +91,7 @@ function analizzaPasto() {
         htmlFeedback = `<h3>${alimentoRilevato.nome}</h3><p>Nutrienti: ${categorie.join(', ')}</p>`;
         if (alimentoRilevato.noteCliniche) htmlFeedback += `<div class="alert-box" style="border-color: #3498db; background: #e8f4fd;">${alimentoRilevato.noteCliniche}</div>`;
     } else {
-        htmlFeedback = `<h3>Alimento non in lista</h3><p>Segui i suggerimenti per bilanciare.</p>`;
+        htmlFeedback = `<h3>Alimento non in lista</h3><p>Segui i suggerimenti per bilanciare il pasto.</p>`;
         alimentoRilevato = { nome: input.charAt(0).toUpperCase() + input.slice(1), macro: [] };
     }
 
@@ -125,34 +126,24 @@ function showTab(tabId) {
     document.querySelectorAll('.tab-bar button').forEach(btn => btn.classList.remove('active'));
     document.getElementById(tabId).classList.remove('hidden');
     document.getElementById('tab-' + tabId).classList.add('active');
+    
     if (tabId === 'guida') caricaGuida();
     if (tabId === 'diario') mostraDiario();
 }
 
-async function caricaGuida() {
+function caricaGuida() {
     const guida = document.getElementById('guida-contenuto');
-    guida.innerHTML = "<p style='text-align:center;'>Aggiornamento della guida clinica in corso...</p>";
-    
-    // TRUCCO ANTI-CACHE: Aggiungiamo l'ora esatta alla fine del link
-    // Questo forza il browser a pensare che sia un file nuovo ogni secondo
-    const timestamp = new Date().getTime();
-    const urlSenzaCache = `${DOC_BASE_URL}&t=${timestamp}`;
-    
-    try {
-        const response = await fetch(urlSenzaCache);
-        const html = await response.text();
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, 'text/html');
-        
-        // Pulizia stili Google
-        const styles = doc.querySelectorAll('style');
-        styles.forEach(s => s.remove());
-        
-        guida.innerHTML = `<div class="card">${doc.body.innerHTML}</div>`;
-    } catch (e) {
-        console.error("Errore guida:", e);
-        guida.innerHTML = `<div class="card"><p>⚠️ Errore nel caricamento. Verifica la connessione.</p></div>`;
-    }
+    // Soluzione con iFrame: incorpora la versione "preview" del documento Google senza blocchi
+    guida.innerHTML = `
+        <div class="card" style="padding: 0; overflow: hidden; height: 75vh; border-radius: 12px;">
+            <iframe 
+                src="https://docs.google.com/document/d/${DOC_GUIDA_ID}/preview" 
+                width="100%" 
+                height="100%" 
+                style="border: none;">
+            </iframe>
+        </div>
+    `;
 }
 
 function salvaNelDiario() {
@@ -170,6 +161,7 @@ function salvaNelDiario() {
         document.getElementById('food-input').value = "";
         document.getElementById('extra-input').value = "";
         document.getElementById('result-area').classList.add('hidden');
+        alimentoRilevato = null;
     } catch (e) { alert("Errore salvataggio."); }
 }
 
