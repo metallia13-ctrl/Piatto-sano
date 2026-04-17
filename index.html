@@ -3,39 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Piatto Chiaro - Nutrizione Avanzata</title>
+    <meta name="description" content="Assistente nutrizionale per anziani e persone con deficit cognitivi.">
+    <title>Piatto Chiaro - Nutrizione Clinica</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <nav class="tab-bar">
+    <nav class="tab-bar" role="navigation">
         <button onclick="showTab('componi')" id="tab-componi" class="active">Pasto</button>
         <button onclick="showTab('diario')" id="tab-diario">Diario</button>
         <button onclick="showTab('guida')" id="tab-guida">Guida Medica</button>
     </nav>
 
     <main id="app-container">
-        <section id="componi" class="tab-content">
-            <h1>Cosa mangiamo?</h1>
+        <section id="componi" class="tab-content" role="region">
+            <h1>Cosa mangiamo oggi?</h1>
+            <p style="text-align:center; font-size: 0.9rem; color: #7f8c8d;">Scrivi il nome di un alimento per analizzarlo.</p>
+            
             <div class="input-group">
-                <input type="text" id="food-input" placeholder="Es: Lenticchie, Pasta, Mozzarella...">
+                <input type="text" id="food-input" placeholder="Es: Pasta, Lenticchie o Pollo...">
                 <button onclick="analizzaPasto()" id="btn-analizza">Analizza Pasto</button>
+                <p id="loading-msg" style="font-size: 0.8rem; text-align: center; color: #27ae60; margin-top: 10px;">
+                    ● In attesa del database...
+                </p>
             </div>
 
             <div id="result-area" class="hidden">
                 <div id="feedback-card" class="card"></div>
+                
+                <div id="giulia-consiglia-card" class="card hidden" style="border-left-color: #e84393; background-color: #fff0f5;">
+                    <h4 style="color: #e84393; margin-top: 0; margin-bottom: 5px;">👩‍⚕️ Giulia consiglia:</h4>
+                    <p id="giulia-consiglia-text" style="font-style: italic; margin-top: 0; color: #2d3436;"></p>
+                </div>
+
                 <div id="suggestions-card" class="card"></div>
-                <button onclick="salvaNelDiario()" class="btn-save">Salva nel Diario</button>
+                
+                <div class="card" style="border-left-color: #3498db;">
+                    <p><strong>Cosa hai aggiunto per completare il piatto?</strong></p>
+                    <input type="text" id="extra-input" placeholder="Es: Insalata e Pane">
+                    <button onclick="salvaNelDiario()" class="btn-save">Conferma e Salva nel Diario</button>
+                </div>
             </div>
         </section>
 
-        <section id="diario" class="tab-content hidden">
+        <section id="diario" class="tab-content hidden" role="region">
             <h1>Storico Pasti</h1>
+            <p style="text-align:center; font-size: 0.9rem; margin-bottom: 20px;">Qui trovi la lista dei pasti salvati per monitorare le abitudini.</p>
             <div id="diario-lista"></div>
-            <button onclick="svuotaDiario()" class="btn-delete">Svuota Diario</button>
+            <button onclick="svuotaDiario()" class="btn-delete">Svuota tutto il diario</button>
         </section>
 
-        <section id="guida" class="tab-content hidden">
-            <h1>Conoscenza Nutrizionale</h1>
+        <section id="guida" class="tab-content hidden" role="region">
+            <h1>Evidenze Nutrizionali</h1>
             <div id="guida-contenuto"></div>
         </section>
     </main>
