@@ -1,20 +1,45 @@
-<nav class="tab-bar">
-    <button onclick="showTab('componi')" id="tab-componi" class="active">Pasto</button>
-    <button onclick="showTab('diario')" id="tab-diario">Diario</button>
-    <button onclick="showTab('guida')" id="tab-guida">Guida</button>
-</nav>
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Piatto Chiaro - Nutrizione Avanzata</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="tab-bar">
+        <button onclick="showTab('componi')" id="tab-componi" class="active">Pasto</button>
+        <button onclick="showTab('diario')" id="tab-diario">Diario</button>
+        <button onclick="showTab('guida')" id="tab-guida">Guida Medica</button>
+    </nav>
 
-<main id="app-container">
-    <section id="componi" class="tab-content">
+    <main id="app-container">
+        <section id="componi" class="tab-content">
+            <h1>Cosa mangiamo?</h1>
+            <div class="input-group">
+                <input type="text" id="food-input" placeholder="Es: Lenticchie, Pasta, Mozzarella...">
+                <button onclick="analizzaPasto()" id="btn-analizza">Analizza Pasto</button>
+            </div>
+
+            <div id="result-area" class="hidden">
+                <div id="feedback-card" class="card"></div>
+                <div id="suggestions-card" class="card"></div>
+                <button onclick="salvaNelDiario()" class="btn-save">Salva nel Diario</button>
+            </div>
         </section>
 
-    <section id="diario" class="tab-content hidden">
-        <h1>Storico Pasti</h1>
-        <div id="diario-lista"></div>
-    </section>
+        <section id="diario" class="tab-content hidden">
+            <h1>Storico Pasti</h1>
+            <div id="diario-lista"></div>
+            <button onclick="svuotaDiario()" class="btn-delete">Svuota Diario</button>
+        </section>
 
-    <section id="guida" class="tab-content hidden">
-        <h1>Educazione Alimentare</h1>
-        <div id="guida-contenuto"></div>
-    </section>
-</main>
+        <section id="guida" class="tab-content hidden">
+            <h1>Conoscenza Nutrizionale</h1>
+            <div id="guida-contenuto"></div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
