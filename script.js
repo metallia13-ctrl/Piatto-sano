@@ -1,11 +1,9 @@
+// Database Google Sheets per Alimenti e Consigli (questi rimangono automatici)
 const SHEET_ID = '1WwWvH2q5zlKgC0pZaR6zruLbhOaNV5W1v8cEIo9XwYc';
-const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv`;
+const ALIMENTI_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=0`;
 
 const GIULIA_SHEET_ID = '1hSMX4IAtoX2M7BbIPvgVODCCqMY7HUWdt_MGKLpBbvE';
 const GIULIA_SHEET_URL = `https://docs.google.com/spreadsheets/d/${GIULIA_SHEET_ID}/export?format=csv`;
-
-// L'ID del tuo documento per la Guida
-const DOC_GUIDA_ID = '1C4-HVbOTA-ZTEKXRsLDVSgqK0mPfz3Kt8zejc1w2LfM';
 
 let nutrizioneDB = [];
 let consigliGiuliaDB = [];
@@ -15,166 +13,123 @@ async function caricaDatabase() {
     try {
         const ts = new Date().getTime();
         
-        // Database Alimenti
-        const response1 = await fetch(`${SHEET_URL}&t=${ts}`);
-        const data1 = await response1.text();
-        const righe1 = data1.split('\n').slice(1);
-        nutrizioneDB = righe1.map(riga => {
-            const colonne = riga.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-            if (colonne.length < 4) return null;
-            const macros = colonne[2].replace(/"/g, '').toLowerCase().split(';').map(m => m.trim());
-            const punteggioStr = colonne.length > 4 ? colonne[4].replace(/"/g, '').trim() : "5";
+        // 1. Carica Alimenti
+        const res1 = await fetch(`${ALIMENTI_URL}&t=${ts}`);
+        const data1 = await res1.text();
+        nutrizioneDB = data1.split('\n').slice(1).map(r => {
+            const c = r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+            if (c.length < 4) return null;
             return {
-                keywords: colonne[0].replace(/"/g, '').toLowerCase().split(';').map(k => k.trim()),
-                nome: colonne[1].replace(/"/g, '').trim(),
-                macro: macros,
-                noteCliniche: colonne[3].replace(/"/g, '').trim(),
-                punteggio: parseInt(punteggioStr) || 5,
-                numeroMacro: macros.length
+                keywords: c[0].replace(/"/g, '').toLowerCase().split(';').map(k => k.trim()),
+                nome: c[1].replace(/"/g, '').trim(),
+                macro: c[2].replace(/"/g, '').toLowerCase().split(';').map(m => m.trim()),
+                note: c[3].replace(/"/g, '').trim(),
+                punteggio: parseInt(c[4]) || 5
             };
-        }).filter(item => item !== null);
+        }).filter(i => i);
 
-        // Database Consigli Giulia
-        const response2 = await fetch(`${GIULIA_SHEET_URL}&t=${ts}`);
-        const data2 = await response2.text();
-        const righe2 = data2.split('\n').slice(1);
-        consigliGiuliaDB = righe2.map(riga => {
-            const colonne = riga.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-            if (colonne.length < 2) return null;
-            return {
-                alimento: colonne[0].replace(/"/g, '').toLowerCase().trim(),
-                consiglio: colonne[1].replace(/"/g, '').trim()
-            };
-        }).filter(item => item !== null);
+        // 2. Carica Consigli Giulia
+        const res2 = await fetch(`${GIULIA_SHEET_URL}&t=${ts}`);
+        const data2 = await res2.text();
+        consigliGiuliaDB = data2.split('\n').slice(1).map(r => {
+            const c = r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+            return c.length >= 2 ? { al: c[0].replace(/"/g, '').toLowerCase().trim(), txt: c[1].replace(/"/g, '').trim() } : null;
+        }).filter(i => i);
 
-        document.getElementById('loading-msg').innerText = "● Sistemi clinici sincronizzati";
-    } catch (error) {
-        console.error("Errore database:", error);
-        document.getElementById('loading-msg').innerText = "⚠️ Errore di connessione ai dati";
+        document.getElementById('loading-msg').innerText = "● App pronta";
+    } catch (e) { 
+        document.getElementById('loading-msg').innerText = "⚠️ Errore sincronizzazione dati"; 
     }
 }
 
-window.onload = () => { caricaDatabase(); };
-
-function generaListaSuggerimenti(macroRichiesto) {
-    let candidati = nutrizioneDB.filter(item => item.macro.includes(macroRichiesto));
-    candidati.sort((a, b) => {
-        if (a.punteggio !== b.punteggio) return a.punteggio - b.punteggio; 
-        return b.numeroMacro - a.numeroMacro; 
-    });
-    if (candidati.length === 0) return "<p>Nessun alimento trovato.</p>";
-    let html = `<ul style="font-size: 1rem; list-style-type: none; padding-left: 0;">`;
-    candidati.forEach(c => {
-        let colorBadge = "#bdc3c7"; 
-        if(c.punteggio <= 3) colorBadge = "#2ecc71"; 
-        if(c.punteggio >= 8) colorBadge = "#e74c3c"; 
-        html += `<li style="margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #ecf0f1;">
-                    <strong>${c.nome}</strong> <span style="background: ${colorBadge}; color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.8rem; margin-left: 5px;">Score: ${c.punteggio}</span>
-                    <br><small style="color: #7f8c8d;">${c.macro.join(', ')}</small>`;
-        if (c.noteCliniche) html += `<br><small style="color: #34495e; display: block; margin-top: 4px;"><em>${c.noteCliniche}</em></small>`;
-        html += `</li>`;
-    });
-    html += `</ul>`;
-    return html;
-}
+window.onload = caricaDatabase;
 
 function analizzaPasto() {
     const input = document.getElementById('food-input').value.toLowerCase().trim();
     if (!input) return;
 
     alimentoRilevato = nutrizioneDB.find(item => item.keywords.some(kw => input.includes(kw)));
-    let htmlFeedback = "";
-    let htmlSuggerimenti = "<h4>Analisi opzioni terapeutiche:</h4>";
-    const categorie = alimentoRilevato ? alimentoRilevato.macro : [];
+    const resArea = document.getElementById('result-area');
+    const feedback = document.getElementById('feedback-card');
+    const sugg = document.getElementById('suggestions-card');
+    const giuliaCard = document.getElementById('giulia-consiglia-card');
+    const giuliaText = document.getElementById('giulia-consiglia-text');
 
     if (alimentoRilevato) {
-        htmlFeedback = `<h3>${alimentoRilevato.nome}</h3><p>Nutrienti: ${categorie.join(', ')}</p>`;
-        if (alimentoRilevato.noteCliniche) htmlFeedback += `<div class="alert-box" style="border-color: #3498db; background: #e8f4fd;">${alimentoRilevato.noteCliniche}</div>`;
+        feedback.innerHTML = `<h3>${alimentoRilevato.nome}</h3><p>Nutrienti: ${alimentoRilevato.macro.join(', ')}</p>
+                              <div class="alert-box" style="border-color:#3498db; background:#e8f4fd;">${alimentoRilevato.note}</div>`;
     } else {
-        htmlFeedback = `<h3>Alimento non in lista</h3><p>Segui i suggerimenti per bilanciare il pasto.</p>`;
+        feedback.innerHTML = `<h3>Alimento non in lista</h3><p>Usa i consigli sotto per bilanciare.</p>`;
         alimentoRilevato = { nome: input.charAt(0).toUpperCase() + input.slice(1), macro: [] };
     }
 
-    const giuliaCard = document.getElementById('giulia-consiglia-card');
-    const giuliaText = document.getElementById('giulia-consiglia-text');
-    const consiglioTrovato = consigliGiuliaDB.find(item => input.includes(item.alimento) || (alimentoRilevato && alimentoRilevato.nome.toLowerCase().includes(item.alimento)));
-
-    if (consiglioTrovato) {
-        giuliaText.innerText = consiglioTrovato.consiglio;
+    // Consigli Giulia
+    const consiglio = consigliGiuliaDB.find(c => input.includes(c.al) || (alimentoRilevato && alimentoRilevato.nome.toLowerCase().includes(c.al)));
+    if (consiglio) {
+        giuliaText.innerText = consiglio.txt;
         giuliaCard.classList.remove('hidden');
-    } else {
-        giuliaCard.classList.add('hidden');
-    }
+    } else { giuliaCard.classList.add('hidden'); }
 
-    if (!categorie.includes("fibre")) {
-        htmlSuggerimenti += `<div class="alert-box" style="border-color: #27ae60; background: #e9f7ef;"><strong>Carenza di Fibre:</strong></div>` + generaListaSuggerimenti("fibre");
-    }
-    if (!categorie.includes("carboidrati")) {
-        htmlSuggerimenti += `<div class="alert-box" style="border-color: #f39c12; background: #fef5e7;"><strong>Mancano Carboidrati:</strong></div>` + generaListaSuggerimenti("carboidrati");
-    }
-    if (!categorie.includes("proteine")) {
-        htmlSuggerimenti += `<div class="alert-box" style="border-color: #9b59b6; background: #f4ecf7;"><strong>Mancano Proteine:</strong></div>` + generaListaSuggerimenti("proteine");
-    }
-
-    document.getElementById('feedback-card').innerHTML = htmlFeedback;
-    document.getElementById('suggestions-card').innerHTML = htmlSuggerimenti;
-    document.getElementById('result-area').classList.remove('hidden');
-}
-
-function showTab(tabId) {
-    document.querySelectorAll('.tab-content').forEach(section => section.classList.add('hidden'));
-    document.querySelectorAll('.tab-bar button').forEach(btn => btn.classList.remove('active'));
-    document.getElementById(tabId).classList.remove('hidden');
-    document.getElementById('tab-' + tabId).classList.add('active');
+    // Logica Suggerimenti
+    let htmlSugg = "<h4>Bilanciamento consigliato:</h4>";
+    const m = alimentoRilevato.macro;
+    if (!m.includes("fibre")) htmlSugg += `<div class="alert-box" style="border-color:#27ae60; background:#e9f7ef;"><strong>Aggiungi Fibre:</strong> Verdure o legumi.</div>`;
+    if (!m.includes("carboidrati")) htmlSugg += `<div class="alert-box" style="border-color:#f39c12; background:#fef5e7;"><strong>Mancano Carboidrati:</strong> Scegli riso basmati o integrale.</div>`;
+    if (!m.includes("proteine")) htmlSugg += `<div class="alert-box" style="border-color:#9b59b6; background:#f4ecf7;"><strong>Mancano Proteine:</strong> Scegli fiocchi di latte o pesce magro.</div>`;
     
-    if (tabId === 'guida') caricaGuida();
-    if (tabId === 'diario') mostraDiario();
-}
-
-function caricaGuida() {
-    const guida = document.getElementById('guida-contenuto');
-    // Soluzione con iFrame: incorpora la versione "preview" del documento Google senza blocchi
-    guida.innerHTML = `
-        <div class="card" style="padding: 0; overflow: hidden; height: 75vh; border-radius: 12px;">
-            <iframe 
-                src="https://docs.google.com/document/d/${DOC_GUIDA_ID}/preview" 
-                width="100%" 
-                height="100%" 
-                style="border: none;">
-            </iframe>
-        </div>
-    `;
+    sugg.innerHTML = htmlSugg;
+    resArea.classList.remove('hidden');
 }
 
 function salvaNelDiario() {
     const extra = document.getElementById('extra-input').value.trim();
-    let nomeBase = (alimentoRilevato && alimentoRilevato.nome) ? alimentoRilevato.nome : document.getElementById('food-input').value.trim();
-    nomeBase = nomeBase.charAt(0).toUpperCase() + nomeBase.slice(1);
+    const nome = alimentoRilevato ? alimentoRilevato.nome : document.getElementById('food-input').value;
+    const pasto = extra ? `${nome} con ${extra}` : nome;
     
-    const pastoCompleto = extra ? `${nomeBase} con ${extra}` : nomeBase;
+    const diario = JSON.parse(localStorage.getItem('diario_paziente_app')) || [];
+    diario.push({ txt: pasto, data: new Date().toLocaleString() });
+    localStorage.setItem('diario_paziente_app', JSON.stringify(diario));
     
-    try {
-        let diario = JSON.parse(localStorage.getItem('diario_pasti_paziente')) || [];
-        diario.push({ testo: pastoCompleto, data: new Date().toLocaleString() });
-        localStorage.setItem('diario_pasti_paziente', JSON.stringify(diario));
-        alert("Pasto registrato.");
-        document.getElementById('food-input').value = "";
-        document.getElementById('extra-input').value = "";
-        document.getElementById('result-area').classList.add('hidden');
-        alimentoRilevato = null;
-    } catch (e) { alert("Errore salvataggio."); }
+    alert("Pasto salvato nello storico!");
+    document.getElementById('food-input').value = "";
+    document.getElementById('extra-input').value = "";
+    document.getElementById('result-area').classList.add('hidden');
 }
 
 function mostraDiario() {
     const lista = document.getElementById('diario-lista');
-    const diario = JSON.parse(localStorage.getItem('diario_pasti_paziente')) || [];
-    lista.innerHTML = diario.length === 0 ? "<p>Nessun pasto in archivio.</p>" : 
-        diario.map(item => `<div class="card" style="border-left-color: #9b59b6;"><small>${item.data}</small><br><strong>${item.testo}</strong></div>`).reverse().join('');
+    const diario = JSON.parse(localStorage.getItem('diario_paziente_app')) || [];
+    lista.innerHTML = diario.length ? diario.map(i => `<div class="card"><small>${i.data}</small><br><strong>${i.txt}</strong></div>`).reverse().join('') : "<p>Nessun pasto registrato.</p>";
 }
 
-function svuotaDiario() {
-    if(confirm("Cancellare lo storico?")) {
-        localStorage.removeItem('diario_pasti_paziente');
-        mostraDiario();
+// LOGICA AGGIORNATA: Legge dal file locale guida.html
+async function caricaGuida() {
+    const guida = document.getElementById('guida-contenuto');
+    guida.innerHTML = "<p>Caricamento guida clinica...</p>";
+    try {
+        // Aggiungo un piccolo timestamp per evitare che il browser blocchi gli aggiornamenti
+        const ts = new Date().getTime();
+        const response = await fetch(`guida.html?v=${ts}`);
+        if (!response.ok) throw new Error("File non trovato");
+        const html = await response.text();
+        guida.innerHTML = html;
+    } catch (e) {
+        guida.innerHTML = `<div class="card">⚠️ Errore. Assicurati di aver creato il file <strong>guida.html</strong> su GitHub.</div>`;
     }
+}
+
+function showTab(t) {
+    document.querySelectorAll('.tab-content').forEach(s => s.classList.add('hidden'));
+    document.querySelectorAll('.tab-bar button').forEach(b => b.classList.remove('active'));
+    document.getElementById(t).classList.remove('hidden');
+    document.getElementById('tab-'+t).classList.add('active');
+    if(t === 'guida') caricaGuida();
+    if(t === 'diario') mostraDiario();
+}
+
+function svuotaDiario() { 
+    if(confirm("Vuoi davvero cancellare tutto lo storico?")) { 
+        localStorage.removeItem('diario_paziente_app'); 
+        mostraDiario(); 
+    } 
 }
