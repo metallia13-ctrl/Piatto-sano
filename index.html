@@ -15,10 +15,15 @@
     </nav>
 
     <main id="app-container">
+
+        <!-- TAB PASTO -->
         <section id="componi" class="tab-content" role="region">
             <h1>Cosa mangiamo oggi?</h1>
+
+            <div id="semaforo" style="display:flex; justify-content:center; gap:20px; margin: 15px 0 20px 0;"></div>
+
             <p style="text-align:center; font-size: 0.9rem; color: #7f8c8d;">Scrivi il nome di un alimento per analizzarlo.</p>
-            
+
             <div class="input-group">
                 <input type="text" id="food-input" placeholder="Es: Pasta, Lenticchie o Pollo...">
                 <button onclick="analizzaPasto()" id="btn-analizza">Analizza Pasto</button>
@@ -29,14 +34,14 @@
 
             <div id="result-area" class="hidden">
                 <div id="feedback-card" class="card"></div>
-                
+
                 <div id="giulia-consiglia-card" class="card hidden" style="border-left-color: #e84393; background-color: #fff0f5;">
                     <h4 style="color: #e84393; margin-top: 0; margin-bottom: 5px;">👩‍⚕️ Giulia consiglia:</h4>
                     <p id="giulia-consiglia-text" style="font-style: italic; margin-top: 0; color: #2d3436;"></p>
                 </div>
 
                 <div id="suggestions-card" class="card"></div>
-                
+
                 <div class="card" style="border-left-color: #3498db;">
                     <p><strong>Cosa hai aggiunto per completare il piatto?</strong></p>
                     <input type="text" id="extra-input" placeholder="Es: Insalata e Pane">
@@ -45,17 +50,20 @@
             </div>
         </section>
 
+        <!-- TAB DIARIO -->
         <section id="diario" class="tab-content hidden" role="region">
             <h1>Storico Pasti</h1>
-            <p style="text-align:center; font-size: 0.9rem; margin-bottom: 20px;">Qui trovi la lista dei pasti salvati per monitorare le abitudini.</p>
+            <p style="text-align:center; font-size: 0.9rem; margin-bottom: 20px;">Qui trovi la lista dei pasti salvati.</p>
             <div id="diario-lista"></div>
             <button onclick="svuotaDiario()" class="btn-delete">Svuota tutto il diario</button>
         </section>
 
+        <!-- TAB GUIDA -->
         <section id="guida" class="tab-content hidden" role="region">
             <h1>Evidenze Nutrizionali</h1>
             <div id="guida-contenuto"></div>
         </section>
+
     </main>
 
     <script src="script.js"></script>
